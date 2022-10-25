@@ -28,3 +28,4 @@ class BookSerializerTestCase(TestCase):
         ]
 
         self.assertEqual(expected_data, data)
+
