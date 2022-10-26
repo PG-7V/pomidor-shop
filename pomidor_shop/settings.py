@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # Third party
 
+    'debug_toolbar',
     'social_django',
     'django_filters',
 
@@ -60,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'pomidor_shop.urls'
@@ -159,3 +162,11 @@ SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 SOCIAL_AUTH_GITHUB_KEY = 'd91cdccb2347d541e517'
 SOCIAL_AUTH_GITHUB_SECRET = 'b669dc4cdde78d11c81b8972d19617e912ff0d29'
+
+INTERNAL_IPS = ["127.0.0.1",]
+
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
