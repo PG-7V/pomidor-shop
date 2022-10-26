@@ -29,7 +29,7 @@ class BooksApiTestCase(APITestCase):
         books = Book.objects.all().annotate(
             annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
             rating=Avg('userbookrelation__rate')).order_by('id')
-        serializer_data = BooksSerializer(books, many=True).data # noqa
+        serializer_data = BooksSerializer(books, many=True).data  # noqa
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertEqual(serializer_data, response.data)
@@ -41,7 +41,7 @@ class BooksApiTestCase(APITestCase):
             annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
             rating=Avg('userbookrelation__rate')).order_by('id')
         response = self.client.get(url, data={'search': 'Author 1'})
-        serializer_data = BooksSerializer(books, many=True).data # noqa
+        serializer_data = BooksSerializer(books, many=True).data  # noqa
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
@@ -57,7 +57,6 @@ class BooksApiTestCase(APITestCase):
         # print(type(response.data))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
-
 
     def test_create(self):
         self.assertEqual(3, Book.objects.all().count())
@@ -101,7 +100,6 @@ class BooksApiTestCase(APITestCase):
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(2, Book.objects.all().count())
 
-
     def test_update_not_owner(self):
         self.user2 = User.objects.create(username='test_username2', )
         url = reverse('book-detail', args=(self.book_1.id,))
@@ -118,7 +116,6 @@ class BooksApiTestCase(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.book_1.refresh_from_db()
         self.assertEqual(25, self.book_1.price)
-
 
     def test_update_not_owner_but_staff(self):
         self.user2 = User.objects.create(username='test_username2',
@@ -160,7 +157,7 @@ class BooksRelationTestCase(APITestCase):
         json_data = json.dumps(data)
         self.client.force_login(self.user)
         response = self.client.patch(url, data=json_data,
-                                    content_type='application/json')
+                                     content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = UserBookRelation.objects.get(user=self.user,
                                                 book=self.book_1)
@@ -172,12 +169,11 @@ class BooksRelationTestCase(APITestCase):
         json_data = json.dumps(data)
 
         response = self.client.patch(url, data=json_data,
-                                    content_type='application/json')
+                                     content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = UserBookRelation.objects.get(user=self.user,
                                                 book=self.book_1)
         self.assertTrue(relation.in_bookmarks)
-
 
     def test_rate(self):
         url = reverse('userbookrelation-detail', args=(self.book_1.id,))
@@ -187,12 +183,11 @@ class BooksRelationTestCase(APITestCase):
         json_data = json.dumps(data)
         self.client.force_login(self.user)
         response = self.client.patch(url, data=json_data,
-                                    content_type='application/json')
+                                     content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = UserBookRelation.objects.get(user=self.user,
                                                 book=self.book_1)
         self.assertEqual(3, relation.rate)
-
 
     def test_rate_wrong(self):
         url = reverse('userbookrelation-detail', args=(self.book_1.id,))
@@ -202,9 +197,5 @@ class BooksRelationTestCase(APITestCase):
         json_data = json.dumps(data)
         self.client.force_login(self.user)
         response = self.client.patch(url, data=json_data,
-                                    content_type='application/json')
+                                     content_type='application/json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-
-
-
-

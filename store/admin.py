@@ -12,4 +12,3 @@ class BookAdmin(ModelAdmin):
 @admin.register(UserBookRelation)
 class UserBookRelationAdmin(ModelAdmin):
     pass
-

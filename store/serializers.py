@@ -1,5 +1,6 @@
-from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
 from store.models import Book, UserBookRelation
 
 
@@ -15,8 +16,6 @@ class BooksSerializer(ModelSerializer):
 
     def get_likes_count(self, instance):
         return UserBookRelation.objects.filter(book=instance, like=True).count()
-
-
 
 
 class UserBookRelationSerializer(ModelSerializer):

@@ -1,9 +1,9 @@
+from django.contrib.auth.models import User
 from django.db.models import Count, Case, When, Avg
 from django.test import TestCase
 
 from store.models import Book, UserBookRelation
 from store.serializers import BooksSerializer
-from django.contrib.auth.models import User
 
 
 class BookSerializerTestCase(TestCase):
@@ -56,6 +56,4 @@ class BookSerializerTestCase(TestCase):
 
         ]
 
-
         self.assertEqual(expected_data, data)
-
