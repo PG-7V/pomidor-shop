@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth.models import User
-from django.db.models import Count, Case, When
+from django.db.models import Count, Case, When, Avg
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -27,17 +27,19 @@ class BooksApiTestCase(APITestCase):
         url = reverse('book-list')
         response = self.client.get(url)
         books = Book.objects.all().annotate(
-            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1)))).order_by('id')
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
+            rating=Avg('userbookrelation__rate')).order_by('id')
         serializer_data = BooksSerializer(books, many=True).data # noqa
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        print(serializer_data, response.data, sep='\n')
+
         self.assertEqual(serializer_data, response.data)
 
     def test_get_search(self):
         url = reverse('book-list')
 
         books = Book.objects.filter(id__in=[self.book_1.id, self.book_3.id]).annotate(
-            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1)))).order_by('id')
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
+            rating=Avg('userbookrelation__rate')).order_by('id')
         response = self.client.get(url, data={'search': 'Author 1'})
         serializer_data = BooksSerializer(books, many=True).data # noqa
 
@@ -47,7 +49,8 @@ class BooksApiTestCase(APITestCase):
     def test_get_filter(self):
         url = reverse('book-list')
         books = Book.objects.filter(id__in=[self.book_3.id, self.book_2.id]).annotate(
-            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1)))).order_by('id')
+            annotated_likes=Count(Case(When(userbookrelation__like=True, then=1))),
+            rating=Avg('userbookrelation__rate')).order_by('id')
         response = self.client.get(url, data={'price': 55})
         serializer_data = BooksSerializer(books, many=True).data  # noqa
         # print(serializer_data[::-1]==response.data)
