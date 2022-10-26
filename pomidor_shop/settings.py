@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party
-    'django_filters',
+
     'social_django',
+    'django_filters',
 
     # Local
     'store.apps.StoreConfig',
@@ -150,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend'
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 
