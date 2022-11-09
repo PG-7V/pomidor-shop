@@ -101,7 +101,7 @@ DATABASES = {
         'NAME': 'myproject',
         'USER': 'myprojectuser_1',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': 5432,
         'ATOMIC_REQUESTS': True
     }
@@ -163,7 +163,7 @@ SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_GITHUB_KEY = 'd91cdccb2347d541e517'
 SOCIAL_AUTH_GITHUB_SECRET = 'b669dc4cdde78d11c81b8972d19617e912ff0d29'
 
-INTERNAL_IPS = ["127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1",]
 
 if DEBUG:
     import socket  # only if you haven't already imported this
